@@ -32,16 +32,30 @@
     <p><strong>TeraWatt does not collect, store, or transmit any personal data.</strong></p>
     <ul>
         <li>No account or sign-in is required.</li>
-        <li>No analytics, crash reporting, or tracking SDKs are included.</li>
         <li>No advertising networks are used.</li>
-        <li>The app does not request or use INTERNET permission.</li>
+        <li>No device identifiers, IP addresses, or hardware fingerprints are collected.</li>
     </ul>
+
+    <h2>Anonymous Analytics</h2>
+    <p>TeraWatt sends anonymous usage events (such as "puzzle completed" and "app launched") to Azure Application Insights to help us understand how players use the game and improve the experience. These events contain:</p>
+    <ul>
+        <li>A random session ID that is regenerated each time you open the app (not persisted or linkable across sessions)</li>
+        <li>Game-related data: difficulty level, star rating, solve time, and grid size</li>
+    </ul>
+    <p>These events do <strong>not</strong> contain:</p>
+    <ul>
+        <li>Device identifiers, advertising IDs, or hardware fingerprints</li>
+        <li>IP addresses (masked/zeroed server-side before storage)</li>
+        <li>Names, email addresses, or any account information</li>
+        <li>Location data</li>
+    </ul>
+    <p>You can disable anonymous analytics at any time in <strong>Settings &gt; Privacy &gt; Anonymous Analytics</strong>. When disabled, no data is sent.</p>
 
     <h2>Local Data</h2>
     <p>All game data — including puzzle progress, scores, settings, and cosmetic purchases — is stored locally on your device using Android's standard SharedPreferences and Room database. This data never leaves your device.</p>
 
     <h2>Third-Party Services</h2>
-    <p>TeraWatt does not integrate any third-party services, SDKs, or APIs. The app functions entirely offline.</p>
+    <p>TeraWatt uses <strong>Azure Application Insights</strong> (operated by Microsoft) solely for anonymous analytics as described above. No other third-party services, SDKs, or APIs are integrated. Microsoft's privacy policy is available at <a href="https://privacy.microsoft.com/en-us/privacystatement">privacy.microsoft.com</a>.</p>
 
     <h2>Children's Privacy</h2>
     <p>TeraWatt does not collect any personal information from anyone, including children under 13. The app is suitable for all ages.</p>
