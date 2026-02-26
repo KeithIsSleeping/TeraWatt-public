@@ -50,51 +50,167 @@
   }
   .store-link:hover { text-decoration: underline; }
   .status { color: #FFB800; font-size: 13px; margin-top: 16px; min-height: 20px; }
+
+  /* ── Link Builder section ── */
+  .builder {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #3A3A5C;
+  }
+  .builder h2 { color: #00D4FF; font-size: 18px; margin-bottom: 6px; }
+  .builder .desc { color: #999; font-size: 13px; margin-bottom: 16px; }
+  .builder input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #3A3A5C;
+    background: #1A1A2E;
+    color: #E0E0E0;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    text-align: center;
+    text-transform: uppercase;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .builder input:focus { border-color: #7B2FBE; }
+  .builder input::placeholder { letter-spacing: normal; text-transform: none; color: #666; }
+  .result-box {
+    margin-top: 14px;
+    padding: 12px;
+    background: #1A1A2E;
+    border-radius: 10px;
+    word-break: break-all;
+    font-size: 13px;
+    color: #00D4FF;
+    display: none;
+  }
+  .result-box .label { color: #999; font-size: 11px; display: block; margin-bottom: 4px; }
+  .result-box .diff-badge { color: #FFB800; font-size: 12px; display: block; margin-top: 6px; }
+  .copy-btn {
+    margin-top: 10px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: none;
+    background: #7B2FBE;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    display: none;
+    transition: background 0.2s;
+  }
+  .copy-btn:hover { background: #9B4FDE; }
+  .copy-btn:active { background: #6B1FAE; }
+  .builder .error { color: #FF5555; font-size: 13px; margin-top: 8px; min-height: 18px; }
+  .copied-toast {
+    color: #4ADE80;
+    font-size: 12px;
+    margin-top: 6px;
+    min-height: 16px;
+    transition: opacity 0.3s;
+  }
 </style>
 </head>
 <body>
 <div class="card">
   <div class="bolt">⚡</div>
   <h1>TeraWatt Challenge</h1>
-  <p class="subtitle">Someone challenged you to solve their puzzle!</p>
 
-  <a id="openBtn" class="open-btn" href="#">Open in TeraWatt</a>
+  <!-- Challenge open section (shown when URL has params) -->
+  <div id="challengeSection">
+    <p class="subtitle">Someone challenged you to solve their puzzle!</p>
 
-  <p class="status" id="status"></p>
+    <a id="openBtn" class="open-btn" href="#">Open in TeraWatt</a>
 
-  <a class="store-link" href="https://play.google.com/store/apps/details?id=com.terawatt">
-    Don't have TeraWatt? Get it on Google Play
-  </a>
+    <p class="status" id="status"></p>
+
+    <a class="store-link" href="https://play.google.com/store/apps/details?id=com.terawatt">
+      Don't have TeraWatt? Get it on Google Play
+    </a>
+  </div>
+
+  <!-- ── Link Builder ── -->
+  <div class="builder">
+    <h2>Build a Challenge Link</h2>
+    <p class="desc">Paste a puzzle code from the app to create a shareable link</p>
+    <input id="codeInput" type="text" maxlength="8" placeholder="e.g. 2A3K7QMX" autocomplete="off" spellcheck="false">
+    <p class="error" id="builderError"></p>
+    <div class="result-box" id="resultBox">
+      <span class="label">Shareable link:</span>
+      <span id="resultUrl"></span>
+      <span class="diff-badge" id="resultInfo"></span>
+    </div>
+    <button class="copy-btn" id="copyBtn">Copy Link</button>
+    <p class="copied-toast" id="copiedToast"></p>
+  </div>
 </div>
 
 <script>
-  // Parse challenge parameters from URL
-  const params = new URLSearchParams(window.location.search);
-  const seed = params.get('s');
-  const diff = params.get('d');
+  // ── Difficulty names (must match Kotlin Difficulty enum ordinals) ──
+  var DIFFICULTIES = [
+    'Apprentice', 'Journeyman', 'Technician', 'Electrician',
+    'Engineer', 'Specialist', 'Master'
+  ];
+
+  // ── Puzzle code decoder (mirrors PuzzleCode.kt) ──
+  function decodePuzzleCode(raw) {
+    if (!raw) return null;
+    var code = raw.trim().replace(/^#/, '');
+    if (code.length < 7 || code.length > 8) return null;
+
+    // Parse as base-36 unsigned
+    var value;
+    try {
+      value = BigInt('0x0'); // init
+      for (var i = 0; i < code.length; i++) {
+        var c = code[i].toLowerCase();
+        var digit;
+        if (c >= '0' && c <= '9') digit = c.charCodeAt(0) - 48;
+        else if (c >= 'a' && c <= 'z') digit = c.charCodeAt(0) - 87;
+        else return null;
+        value = value * 36n + BigInt(digit);
+      }
+    } catch (e) { return null; }
+
+    var seed, diffOrd, challengeIdx;
+    var seedMask = 0xFFFFFFFFn;
+
+    if (code.length <= 7) {
+      // V1: bits 35-32 = difficulty, bits 31-0 = seed
+      diffOrd = Number((value >> 32n) & 0xFn);
+      seed = Number(value & seedMask);
+      challengeIdx = 0;
+    } else {
+      // V2: bits 40-37 = difficulty, bits 36-33 = challenge, bit 32 = reserved, bits 31-0 = seed
+      diffOrd = Number((value >> 37n) & 0xFn);
+      challengeIdx = Number((value >> 33n) & 0xFn);
+      seed = Number(value & seedMask);
+    }
+
+    if (diffOrd < 0 || diffOrd >= DIFFICULTIES.length) return null;
+    return { seed: seed, difficulty: diffOrd, challengeIndex: challengeIdx };
+  }
+
+  // ── Challenge page deep-link handler ──
+  var params = new URLSearchParams(window.location.search);
+  var seed = params.get('s');
+  var diff = params.get('d');
 
   if (seed && diff !== null) {
-    const deepLink = 'terawatt://challenge?s=' + seed + '&d=' + diff;
-
-    // Intent URI for Chrome on Android — opens app or falls back to Play Store
-    const intentUri = 'intent://challenge?s=' + seed + '&d=' + diff
+    var deepLink = 'terawatt://challenge?s=' + seed + '&d=' + diff;
+    var intentUri = 'intent://challenge?s=' + seed + '&d=' + diff
       + '#Intent;scheme=terawatt;package=com.terawatt;end';
 
-    const openBtn = document.getElementById('openBtn');
-    const status = document.getElementById('status');
-
-    // Detect if Android
-    const isAndroid = /android/i.test(navigator.userAgent);
+    var openBtn = document.getElementById('openBtn');
+    var status = document.getElementById('status');
+    var isAndroid = /android/i.test(navigator.userAgent);
 
     if (isAndroid) {
-      // Use intent URI for best Android compatibility
       openBtn.href = intentUri;
-
-      // Also try auto-opening via deep link
-      const start = Date.now();
+      var start = Date.now();
       window.location = deepLink;
-
-      // If we're still here after 1.5s, the app probably isn't installed
       setTimeout(function() {
         if (Date.now() - start < 2000) return;
         status.textContent = 'Tap the button above to open TeraWatt';
@@ -104,9 +220,65 @@
       status.textContent = 'TeraWatt is available on Android';
     }
   } else {
-    document.getElementById('status').textContent = 'Invalid challenge link';
-    document.getElementById('openBtn').style.display = 'none';
+    // No challenge params — hide challenge section, show builder as primary
+    document.getElementById('challengeSectiongeSection').style.display = 'none';
   }
+
+  // ── Link Builder ──
+  var baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+
+  var codeInput = document.getElementById('codeInput');
+  var resultBox = document.getElementById('resultBox');
+  var resultUrl = document.getElementById('resultUrl');
+  var resultInfo = document.getElementById('resultInfo');
+  var copyBtn = document.getElementById('copyBtn');
+  var builderError = document.getElementById('builderError');
+  var copiedToast = document.getElementById('copiedToast');
+
+  codeInput.addEventListener('input', function() {
+    var val = codeInput.value.trim().toUpperCase();
+    builderError.textContent = '';
+    copiedToast.textContent = '';
+
+    if (val.length < 7) {
+      resultBox.style.display = 'none';
+      copyBtn.style.display = 'none';
+      return;
+    }
+
+    var decoded = decodePuzzleCode(val);
+    if (!decoded) {
+      builderError.textContent = 'Invalid puzzle code';
+      resultBox.style.display = 'none';
+      copyBtn.style.display = 'none';
+      return;
+    }
+
+    var link = baseUrl + '?s=' + decoded.seed + '&d=' + decoded.difficulty;
+    resultUrl.textContent = link;
+    resultInfo.textContent = DIFFICULTIES[decoded.difficulty]
+      + (decoded.challengeIndex > 0 ? ' (Challenge #' + decoded.challengeIndex + ')' : '');
+    resultBox.style.display = 'block';
+    copyBtn.style.display = 'inline-block';
+  });
+
+  copyBtn.addEventListener('click', function() {
+    var link = resultUrl.textContent;
+    navigator.clipboard.writeText(link).then(function() {
+      copiedToast.textContent = 'Copied!';
+      setTimeout(function() { copiedToast.textContent = ''; }, 2000);
+    }).catch(function() {
+      // Fallback for older browsers
+      var ta = document.createElement('textarea');
+      ta.value = link;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      copiedToast.textContent = 'Copied!';
+      setTimeout(function() { copiedToast.textContent = ''; }, 2000);
+    });
+  });
 </script>
 </body>
 </html>
