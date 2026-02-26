@@ -235,7 +235,11 @@
   var builderError = document.getElementById('builderError');
   var copiedToast = document.getElementById('copiedToast');
 
-  codeInput.addEventListener('input', function() {
+  codeInput.addEventListener('input', processCode);
+  codeInput.addEventListener('paste', function() { setTimeout(processCode, 0); });
+  codeInput.addEventListener('keyup', processCode);
+
+  function processCode() {
     var val = codeInput.value.trim().toUpperCase();
     builderError.textContent = '';
     copiedToast.textContent = '';
@@ -260,7 +264,7 @@
       + (decoded.challengeIndex > 0 ? ' (Challenge #' + decoded.challengeIndex + ')' : '');
     resultBox.style.display = 'block';
     copyBtn.style.display = 'inline-block';
-  });
+  }
 
   copyBtn.addEventListener('click', function() {
     var link = resultUrl.textContent;
