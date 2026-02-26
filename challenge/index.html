@@ -103,6 +103,20 @@
   }
   .copy-btn:hover { background: #9B4FDE; }
   .copy-btn:active { background: #6B1FAE; }
+  .gen-btn {
+    margin-top: 12px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    border: none;
+    background: #00D4FF;
+    color: #1A1A2E;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .gen-btn:hover { background: #33DDFF; }
+  .gen-btn:active { background: #00B8E0; }
   .builder .error { color: #FF5555; font-size: 13px; margin-top: 8px; min-height: 18px; }
   .copied-toast {
     color: #4ADE80;
@@ -137,6 +151,7 @@
     <h2>Build a Challenge Link</h2>
     <p class="desc">Paste a puzzle code from the app to create a shareable link</p>
     <input id="codeInput" type="text" maxlength="8" placeholder="e.g. 2A3K7QMX" autocomplete="off" spellcheck="false">
+    <button class="gen-btn" id="genBtn">Generate Link</button>
     <p class="error" id="builderError"></p>
     <div class="result-box" id="resultBox">
       <span class="label">Shareable link:</span>
@@ -146,7 +161,7 @@
     <button class="copy-btn" id="copyBtn">Copy Link</button>
     <p class="copied-toast" id="copiedToast"></p>
   </div>
-  <p class="version">v3</p>
+  <p class="version">v4</p>
 </div>
 
 <script>
@@ -237,9 +252,8 @@
   var builderError = document.getElementById('builderError');
   var copiedToast = document.getElementById('copiedToast');
 
-  codeInput.addEventListener('input', processCode);
-  codeInput.addEventListener('paste', function() { setTimeout(processCode, 0); });
-  codeInput.addEventListener('keyup', processCode);
+  var genBtn = document.getElementById('genBtn');
+  genBtn.addEventListener('click', processCode);
 
   function processCode() {
     var val = codeInput.value.trim().toUpperCase();
