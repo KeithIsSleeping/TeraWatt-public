@@ -159,9 +159,13 @@
       <span class="diff-badge" id="resultInfo"></span>
     </div>
     <button class="copy-btn" id="copyBtn">Copy Link</button>
+    <a class="open-btn" id="openGenBtn" href="#" style="display:none; margin-top: 10px; font-size: 14px; padding: 10px 24px;">Open in TeraWatt</a>
+    <a class="store-link" id="storeLink" href="https://play.google.com/store/apps/details?id=com.terawatt" style="display:none">
+      Don't have TeraWatt? Get it on Google Play
+    </a>
     <p class="copied-toast" id="copiedToast"></p>
   </div>
-  <p class="version">v5</p>
+  <p class="version">v6</p>
 </div>
 
 <script>
@@ -275,11 +279,25 @@
     }
 
     var link = baseUrl + '?s=' + decoded.seed + '&d=' + decoded.difficulty;
+    var deepLink = 'terawatt://challenge?s=' + decoded.seed + '&d=' + decoded.difficulty;
     resultUrl.textContent = link;
     resultInfo.textContent = DIFFICULTIES[decoded.difficulty]
       + (decoded.challengeIndex > 0 ? ' (Challenge #' + decoded.challengeIndex + ')' : '');
     resultBox.style.display = 'block';
     copyBtn.style.display = 'inline-block';
+
+    // Show Open in TeraWatt button with deep link
+    var openGenBtn = document.getElementById('openGenBtn');
+    var isAndroid = /android/i.test(navigator.userAgent);
+    if (isAndroid) {
+      openGenBtn.href = 'intent://challenge?s=' + decoded.seed + '&d=' + decoded.difficulty
+        + '#Intent;scheme=terawatt;package=com.terawatt;end';
+    } else {
+      openGenBtn.href = deepLink;
+    }
+    openGenBtn.style.display = 'inline-block';
+    document.getElementById('storeLink').style.display = 'block';
+
     resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
