@@ -264,6 +264,7 @@
       + (decoded.challengeIndex > 0 ? ' (Challenge #' + decoded.challengeIndex + ')' : '');
     resultBox.style.display = 'block';
     copyBtn.style.display = 'inline-block';
+    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   copyBtn.addEventListener('click', function() {
