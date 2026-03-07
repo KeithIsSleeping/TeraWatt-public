@@ -4,7 +4,7 @@ A circuit puzzle game for Android where you rotate wire segments and components 
 
 ## Links
 
-- [Privacy Policy](https://keithissleeping.github.io/TeraWatt-public/privacy-policy.html)
+- [Privacy Policy](https://terawattgame.org/privacy-policy.html)
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.terawatt)
 
 ## Feedback
