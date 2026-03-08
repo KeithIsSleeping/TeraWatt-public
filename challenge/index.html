@@ -165,7 +165,7 @@
     </a>
     <p class="copied-toast" id="copiedToast"></p>
   </div>
-  <p class="version">v6</p>
+  <p class="version">v7</p>
 </div>
 
 <script>
@@ -216,8 +216,15 @@
 
   // ── Challenge page deep-link handler ──
   var params = new URLSearchParams(window.location.search);
-  var seed = params.get('s');
-  var diff = params.get('d');
+  var seed = null, diff = null;
+
+  // Prefer compact ?c=PUZZLECODE, fall back to legacy ?s=&d=
+  var cParam = params.get('c');
+  if (cParam) {
+    var decoded = decodePuzzleCode(cParam);
+    if (decoded) { seed = decoded.seed; diff = decoded.difficulty; }
+  }
+  if (seed === null) { seed = params.get('s'); diff = params.get('d'); }
 
   if (seed && diff !== null) {
     var deepLink = 'terawatt://challenge?s=' + seed + '&d=' + diff;
@@ -278,7 +285,7 @@
       return;
     }
 
-    var link = baseUrl + '?s=' + decoded.seed + '&d=' + decoded.difficulty;
+    var link = baseUrl + '?c=' + val;
     var deepLink = 'terawatt://challenge?s=' + decoded.seed + '&d=' + decoded.difficulty;
     resultUrl.textContent = link;
     resultInfo.textContent = DIFFICULTIES[decoded.difficulty]
