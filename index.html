@@ -7,7 +7,7 @@
     <meta name="description" content="Complete circuits by rotating wires and components. A satisfying puzzle game for Android.">
     <meta property="og:title" content="TeraWatt - Circuit Puzzle Game">
     <meta property="og:description" content="Complete circuits by rotating wires and components. Puzzle your way to mastery.">
-    <meta property="og:image" content="https://terawattgame.org/assets/icon.png">
+    <meta property="og:image" content="https://terawattgame.org/assets/feature-art.png">
     <meta property="og:url" content="https://terawattgame.org">
     <meta property="og:type" content="website">
     <link rel="icon" type="image/png" href="assets/icon.png">
@@ -122,6 +122,23 @@
             background: linear-gradient(transparent, var(--dark-workshop));
         }
 
+        .hero-banner {
+            width: 100%;
+            max-width: 720px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            box-shadow:
+                0 0 40px rgba(0, 212, 255, 0.15),
+                0 12px 50px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--dark-variant);
+            animation: bannerGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes bannerGlow {
+            0% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.1), 0 12px 50px rgba(0, 0, 0, 0.5); border-color: var(--dark-variant); }
+            100% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.2), 0 12px 60px rgba(123, 47, 190, 0.15); border-color: rgba(0, 212, 255, 0.3); }
+        }
+
         .hero-icon {
             width: 120px;
             height: 120px;
@@ -129,6 +146,53 @@
             margin-bottom: 24px;
             animation: iconGlow 3s ease-in-out infinite alternate;
             filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+        }
+
+        /* ── How to play ──────────────────────────── */
+        .how-to-play {
+            text-align: center;
+        }
+
+        .steps {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 200px;
+            max-width: 240px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--electric-blue), var(--purple-accent));
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .step h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
 
         @keyframes iconGlow {
@@ -385,11 +449,13 @@
 
         /* ── Responsive ───────────────────────────── */
         @media (max-width: 600px) {
+            .hero-banner { border-radius: 14px; }
             .hero-icon { width: 90px; height: 90px; border-radius: 22px; }
             .play-badge img { height: 50px; }
             .screenshot-scroller img { height: 320px; }
             section { padding: 60px 16px; }
             .feature-card { padding: 20px 18px; }
+            .step { min-width: 160px; }
         }
     </style>
 </head>
@@ -410,7 +476,7 @@
     <div class="content">
         <!-- ── Hero ────────────────────────────── -->
         <section class="hero">
-            <img src="assets/icon.png" alt="TeraWatt icon" class="hero-icon">
+            <img src="assets/feature-art.png" alt="TeraWatt feature art" class="hero-banner">
             <h1>TeraWatt</h1>
             <p class="tagline">Complete circuits by rotating wires and components. Puzzle your way to mastery.</p>
             <div class="hero-cta">
@@ -436,6 +502,7 @@
                     allowfullscreen>
                 </iframe>
             </div>
+            <p style="margin-top: 12px;"><a href="https://www.youtube.com/shorts/G3rP3Z94wXQ" style="color: var(--text-dim); text-decoration: none; font-size: 0.85rem;" target="_blank" rel="noopener">Watch on YouTube</a></p>
         </section>
 
         <!-- ── Features ────────────────────────── -->
@@ -475,13 +542,35 @@
             </div>
         </section>
 
+        <!-- ── How to Play ─────────────────────── -->
+        <section class="how-to-play fade-in">
+            <h2>How to <span>Play</span></h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Tap to Rotate</h3>
+                    <p>Tap any wire segment or component to rotate it 90 degrees clockwise.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Complete the Circuit</h3>
+                    <p>Connect the power source to ground through every required element.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Beat Par</h3>
+                    <p>Solve in fewer moves for more stars. Hit par for a coveted gilded bolt.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- ── Screenshots ─────────────────────── -->
         <section class="screenshots fade-in">
             <h2>Gameplay <span>Screenshots</span></h2>
             <div class="screenshot-scroller">
-                <img src="assets/screenshot1.png" alt="TeraWatt puzzle gameplay" loading="lazy">
-                <img src="assets/screenshot2.png" alt="TeraWatt circuit solving" loading="lazy">
-                <img src="assets/screenshot3.png" alt="TeraWatt difficulty progression" loading="lazy">
+                <img src="assets/screenshot4.png" alt="TeraWatt puzzle gameplay" loading="lazy">
+                <img src="assets/screenshot5.png" alt="TeraWatt circuit elements" loading="lazy">
+                <img src="assets/screenshot6.png" alt="TeraWatt cosmetics shop" loading="lazy">
             </div>
         </section>
 
