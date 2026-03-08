@@ -227,9 +227,13 @@
   if (seed === null) { seed = params.get('s'); diff = params.get('d'); }
 
   if (seed && diff !== null) {
-    var deepLink = 'terawatt://challenge?s=' + seed + '&d=' + diff;
-    var intentUri = 'intent://challenge?s=' + seed + '&d=' + diff
-      + '#Intent;scheme=terawatt;package=com.terawatt;end';
+    // Pass puzzle code directly when available so challenge index is preserved
+    var deepLink = cParam
+      ? 'terawatt://challenge?c=' + cParam
+      : 'terawatt://challenge?s=' + seed + '&d=' + diff;
+    var intentUri = cParam
+      ? 'intent://challenge?c=' + cParam + '#Intent;scheme=terawatt;package=com.terawatt;end'
+      : 'intent://challenge?s=' + seed + '&d=' + diff + '#Intent;scheme=terawatt;package=com.terawatt;end';
 
     var openBtn = document.getElementById('openBtn');
     var status = document.getElementById('status');
@@ -286,7 +290,7 @@
     }
 
     var link = baseUrl + '?c=' + val;
-    var deepLink = 'terawatt://challenge?s=' + decoded.seed + '&d=' + decoded.difficulty;
+    var deepLink = 'terawatt://challenge?c=' + val;
     resultUrl.textContent = link;
     resultInfo.textContent = DIFFICULTIES[decoded.difficulty]
       + (decoded.challengeIndex > 0 ? ' (Challenge #' + decoded.challengeIndex + ')' : '');
@@ -297,7 +301,7 @@
     var openGenBtn = document.getElementById('openGenBtn');
     var isAndroid = /android/i.test(navigator.userAgent);
     if (isAndroid) {
-      openGenBtn.href = 'intent://challenge?s=' + decoded.seed + '&d=' + decoded.difficulty
+      openGenBtn.href = 'intent://challenge?c=' + val
         + '#Intent;scheme=terawatt;package=com.terawatt;end';
     } else {
       openGenBtn.href = deepLink;
