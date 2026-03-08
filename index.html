@@ -373,9 +373,25 @@
         }
 
         .feature-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-            display: block;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(123, 47, 190, 0.12));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--electric-blue);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .feature-card h3 {
@@ -545,32 +561,32 @@
             <h2>Why You'll <span>Love It</span></h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <span class="feature-icon" aria-hidden="true">&#x1F50C;</span>
+                    <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></div>
                     <h3>Tap to Rotate</h3>
                     <p>Simple one-tap controls, endlessly deep strategy. Rotate wires, corners, and TEE junctions to complete the circuit.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon" aria-hidden="true">&#x1F3B2;</span>
+                    <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="9" cy="12" r="1" fill="var(--electric-blue)"/><circle cx="15" cy="12" r="1" fill="var(--electric-blue)"/><circle cx="12" cy="9" r="1" fill="var(--electric-blue)"/></svg></div>
                     <h3>Infinite Puzzles</h3>
                     <p>Procedurally generated levels mean every game is unique. Seven difficulty tiers from Apprentice to Grandmaster.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon" aria-hidden="true">&#x1F4C5;</span>
+                    <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></div>
                     <h3>Daily Challenge</h3>
                     <p>A new Grandmaster-level brain teaser every day. Compare times and share results with friends.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon" aria-hidden="true">&#x26A0;</span>
+                    <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="rgba(0,212,255,0.15)"/></svg></div>
                     <h3>Circuit Elements</h3>
                     <p>Diodes, short circuits, color LEDs, and more. Master each mechanic as the logic puzzles get harder.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon" aria-hidden="true">&#x1F3A8;</span>
+                    <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6" cy="12" r="2.5" stroke="var(--purple-light)"/><circle cx="18" cy="12" r="2.5" stroke="var(--warm-amber)"/><path d="M12 21.5a8.4 8.4 0 0 0 2.5-6 8.4 8.4 0 0 0-5 0 8.4 8.4 0 0 0 2.5 6z"/></svg></div>
                     <h3>Customize Everything</h3>
                     <p>Unlock wire themes, board frames, backgrounds, and victory effects. 29 cosmetics across 4 categories.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon" aria-hidden="true">&#x1F512;</span>
+                    <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10" stroke="var(--electric-green)"/></svg></div>
                     <h3>100% Free &amp; Offline</h3>
                     <p>No ads. No tracking. No paywalls. No internet required. A pure offline puzzle game you can play anywhere.</p>
                 </div>
